@@ -4,6 +4,7 @@ from typing import Union
 import aiohttp
 import requests
 
+from api2ch.config import API_BASE
 from api2ch.models.request import Request, RequestBoards, RequestBoardsByTypes, RequestCatalog, RequestCatalogByDate, RequestPage, \
     RequestSinglePost, RequestThread, RequestThreadPostsByNum, RequestThreadPostsByPost, RequestThreads
 from api2ch.models.response import ResponseBoards, ResponseBoardsByTypes, ResponseCatalog, ResponseCatalogByDate, ResponsePage, \
@@ -23,7 +24,7 @@ class Api2chBase:
     """
     Docs: https://2ch.hk/api/res/1.html
     """
-    api_base = 'https://2ch.hk'
+    api_base = API_BASE
 
     def __init__(self, raw_results: bool = False):
         self.raw = raw_results

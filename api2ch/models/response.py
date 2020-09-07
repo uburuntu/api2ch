@@ -22,6 +22,10 @@ class ResponseThread(Response, BoardInfo):
     title: str
     unique_posters: str
 
+    @property
+    def posts(self) -> List[Post]:
+        return self.threads[0].posts
+
 
 class ResponseThreads(Response):
     board: str

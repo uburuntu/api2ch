@@ -26,11 +26,13 @@ class Request(Base):
     def url(self, base: str) -> str:
         raise NotImplementedError
 
-    def do(self) -> __returning__:
-        return self.api.request(self)
+    def do(self, api=None) -> __returning__:
+        api = api or self.api
+        return api.request(self)
 
-    async def do_async(self) -> __returning__:
-        return await self.api.request(self)
+    async def do_async(self, api=None) -> __returning__:
+        api = api or self.api
+        return await api.request(self)
 
 
 Response.update_forward_refs()

@@ -134,6 +134,13 @@ class Api2ch(Api2chBase):
         ...
 ```
 
+Also available method `download_thread_media` (default path: `./dowloads_2ch/%thread_id%/`):
+```python3
+from api2ch import download_thread_media
+
+download_thread_media(url='https://2ch.hk/api/res/1.html', with_thumbnails=True, skip_if_exists=True)
+```
+
 ### Types
 This library uses [pydantic](https://github.com/samuelcolvin/pydantic/) for parsing API responses.
 You can see data models in [api2ch/models](api2ch/models).
