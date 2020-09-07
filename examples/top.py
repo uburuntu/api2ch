@@ -6,4 +6,4 @@ boards = api.boards_by_types()
 for board in boards.Art:
     threads = api.threads(board.id)
     top_thread = threads.sorted_by_views()[0]
-    print(f'— /{threads.request.board} | {board.name} | Top thread: {top_thread.subject}, {top_thread.views} 👁‍🗨')
+    print(f'— /{threads.request.board} | {board.name} | Top thread: {top_thread.subject}, {top_thread.views} 👁')

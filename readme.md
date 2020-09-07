@@ -49,13 +49,13 @@ api = Api2ch()
 
 resp = api.threads('vg')
 for t in resp.threads[:3]:
-    print(f'— {t.subject}, {t.posts_count} 💬, {t.views} 👁‍🗨')
+    print(f'— {t.subject}, {t.posts_count} 💬, {t.views} 👁')
 ```
 Output:
 ```text
-— Paradox Thread №6 стрессовый, 771 💬, 1879 👁‍🗨
-— BioWare General: Varric Tethras Edition, 207 💬, 644 👁‍🗨
-— Fate/Grand Order #193, 683 💬, 4804 👁‍🗨
+— Paradox Thread №6 стрессовый, 771 💬, 1879 👁
+— BioWare General: Varric Tethras Edition, 207 💬, 644 👁
+— Fate/Grand Order #193, 683 💬, 4804 👁
 ```
 
 ### Simple Async
@@ -70,16 +70,16 @@ async def main():
     async with Api2chAsync() as api:
         resp = await api.threads('hw')
         for t in resp.threads[:3]:
-            print(f'— {t.subject}, {t.posts_count} 💬, {t.views} 👁‍🗨')
+            print(f'— {t.subject}, {t.posts_count} 💬, {t.views} 👁')
 
 
 asyncio.run(main())
 ```
 Output:
 ```text
-— Видеокарты AMD #95, 418 💬, 3778 👁‍🗨
-— Сап. Впервые в этом разделе. Как научится разбираться в железе?, 3 💬, 9 👁‍🗨
-— Ноутбукотред №36, 185 💬, 970 👁‍🗨
+— Видеокарты AMD #95, 418 💬, 3778 👁
+— Сап. Впервые в этом разделе. Как научится разбираться в железе?, 3 💬, 9 👁
+— Ноутбукотред №36, 185 💬, 970 👁
 ```
 
 ### Boards
@@ -137,18 +137,18 @@ boards = api.boards_by_types()
 for board in boards.Art:
     threads = api.threads(board.id)
     top_thread = threads.sorted_by_views()[0]
-    print(f'— /{threads.request.board} | {board.name} | Top thread: {top_thread.subject}, {top_thread.views} 👁‍🗨')
+    print(f'— /{threads.request.board} | {board.name} | Top thread: {top_thread.subject}, {top_thread.views} 👁')
 ```
 Output:
 ```text
-— /di | Столовая | Top thread: НОВОЙ БАНОЧКИ НИТЬ ИДИ, 123475 👁‍🗨
-— /de | Дизайн | Top thread: Зарплата, 48958 👁‍🗨
-— /diy | Хобби | Top thread: Кристаллический тред, 1620541 👁‍🗨
-— /mus | Музыканты | Top thread: Язычковых тред., 153772 👁‍🗨
-— /pa | Живопись | Top thread: Сталин 3000, 40392 👁‍🗨
-— /p | Фотография | Top thread: Ссылкотред, 34182 👁‍🗨
-— /wp | Обои и высокое разрешение | Top thread: Милитари пак, 38348 👁‍🗨
-— /wrk | Работа и карьера | Top thread: Яндекс Дзена /zen тред 11, 33648 👁‍🗨
+— /di | Столовая | Top thread: НОВОЙ БАНОЧКИ НИТЬ ИДИ, 123475 👁
+— /de | Дизайн | Top thread: Зарплата, 48958 👁
+— /diy | Хобби | Top thread: Кристаллический тред, 1620541 👁
+— /mus | Музыканты | Top thread: Язычковых тред., 153772 👁
+— /pa | Живопись | Top thread: Сталин 3000, 40392 👁
+— /p | Фотография | Top thread: Ссылкотред, 34182 👁
+— /wp | Обои и высокое разрешение | Top thread: Милитари пак, 38348 👁
+— /wrk | Работа и карьера | Top thread: Яндекс Дзена /zen тред 11, 33648 👁
 ```
 
 ### Top Threads Async
@@ -168,20 +168,20 @@ async def main():
         for coro in asyncio.as_completed(coros):
             threads = await coro
             top_thread = threads.sorted_by_views()[0]
-            print(f'— /{threads.request.board} | Top thread: {top_thread.subject}, {top_thread.views} 👁‍🗨')
+            print(f'— /{threads.request.board} | Top thread: {top_thread.subject}, {top_thread.views} 👁')
 
 
 asyncio.run(main())
 ```
 Output:
 ```text
-— /ra | Top thread: OsmocomBB - Motorola, 1517590 👁‍🗨
-— /hw | Top thread: VR тред возрожденный #4, 17638 👁‍🗨
-— /t | Top thread: Выбираем робот-пылесос, 22336 👁‍🗨
-— /s | Top thread: Форки лиса, 49613 👁‍🗨
-— /pr | Top thread: Советов ньюфагу тред, 25838 👁‍🗨
-— /gd | Top thread: В этом треде ищем напарников для создания своих, 38633 👁‍🗨
-— /mobi | Top thread: PUBG MOBILE/Пупок мобайл-THREAD, 70643 👁‍🗨
+— /ra | Top thread: OsmocomBB - Motorola, 1517590 👁
+— /hw | Top thread: VR тред возрожденный #4, 17638 👁
+— /t | Top thread: Выбираем робот-пылесос, 22336 👁
+— /s | Top thread: Форки лиса, 49613 👁
+— /pr | Top thread: Советов ньюфагу тред, 25838 👁
+— /gd | Top thread: В этом треде ищем напарников для создания своих, 38633 👁
+— /mobi | Top thread: PUBG MOBILE/Пупок мобайл-THREAD, 70643 👁
 ```
 
 ## 📜 Manual

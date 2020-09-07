@@ -12,7 +12,7 @@ async def main():
         for coro in asyncio.as_completed(coros):
             threads = await coro
             top_thread = threads.sorted_by_views()[0]
-            print(f'— /{threads.request.board} | Top thread: {top_thread.subject}, {top_thread.views} 👁‍🗨')
+            print(f'— /{threads.request.board} | Top thread: {top_thread.subject}, {top_thread.views} 👁')
 
 
 asyncio.run(main())
