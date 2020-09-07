@@ -38,8 +38,8 @@ class Post(Base):
     banned: bool
     closed: bool
     op: bool
-    sticky: bool
     endless: bool
+    sticky: int
 
     email: str
     name: str

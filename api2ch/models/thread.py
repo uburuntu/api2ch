@@ -1,7 +1,7 @@
 import datetime
 from typing import List, Optional
 
-from api2ch import API_BASE
+from api2ch.config import API_BASE
 from api2ch.models.base import Base
 from api2ch.models.post import Post
 
