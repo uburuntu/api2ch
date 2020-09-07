@@ -4,6 +4,7 @@ from typing import List, Optional
 from api2ch.config import API_BASE
 from api2ch.models.base import Base
 from api2ch.models.post import Post
+from api2ch.utils import clear_html, convert_html
 
 
 class Thread(Base):
@@ -12,7 +13,21 @@ class Thread(Base):
 
 class ThreadWithStats(Thread):
     subject: str
+
+    @property
+    def header(self):
+        return clear_html(self.subject)
+
     comment: str
+
+    @property
+    def body(self):
+        return convert_html(self.comment)
+
+    @property
+    def body_text(self):
+        return clear_html(self.comment)
+
     num: int
 
     @property

@@ -4,11 +4,26 @@ from typing import List, Optional, Union
 from api2ch.config import API_BASE
 from api2ch.models.base import Base
 from api2ch.models.file import File, Image, Sticker, Video
+from api2ch.utils import clear_html, convert_html
 
 
 class Post(Base):
     subject: str
+
+    @property
+    def header(self):
+        return clear_html(self.subject)
+
     comment: str
+
+    @property
+    def body(self):
+        return convert_html(self.comment)
+
+    @property
+    def body_text(self):
+        return clear_html(self.comment)
+
     files: List[Union[Image, Video, Sticker, File]]
     timestamp: int
     date: str
