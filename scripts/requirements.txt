@@ -1,0 +1,2 @@
+datamodel_code_generator==0.5
+transliterate==1.10

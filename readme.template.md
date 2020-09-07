@@ -12,23 +12,7 @@ Docs: https://2ch.hk/api/res/1.html
 
 ![](https://i.imgur.com/VLbQhEv.jpg)
 
-## 📝 Table of Contents
-
-- [🎒 Installation](#-installation)
-- [🛠 Examples](#-examples)
-  - [Simple](#simple)
-  - [Simple Async](#simple-async)
-  - [Boards](#boards)
-  - [Boards Async](#boards-async)
-  - [Top threads](#top-threads)
-  - [Top Threads Async](#top-threads-async)
-- [📜 Manual](#-manual)
-  - [Methods](#methods)
-  - [Types](#types)
-  - [In case of unsupported types](#in-case-of-unsupported-types)
-- [💬 Contributing](#-contributing)
-- [📝 License](#-license)
-
+{toc}
 
 ---
 
@@ -43,13 +27,7 @@ pip install api2ch
 ### Simple
 
 ```python3
-from api2ch import Api2ch
-
-api = Api2ch()
-
-resp = api.threads('vg')
-for t in resp.threads[:3]:
-    print(f'— {t.subject}, {t.posts_count} 💬, {t.views} 👁‍🗨')
+{simple}
 ```
 Output:
 ```text
@@ -61,19 +39,7 @@ Output:
 ### Simple Async
 
 ```python3
-import asyncio
-
-from api2ch import Api2chAsync
-
-
-async def main():
-    async with Api2chAsync() as api:
-        resp = await api.threads('hw')
-        for t in resp.threads[:3]:
-            print(f'— {t.subject}, {t.posts_count} 💬, {t.views} 👁‍🗨')
-
-
-asyncio.run(main())
+{simple_async}
 ```
 Output:
 ```text
@@ -85,13 +51,7 @@ Output:
 ### Boards
 
 ```python3
-from api2ch import Api2ch
-
-api = Api2ch()
-
-for board in ('tv', 'hw', 'fiz'):
-    c = api.catalog(board)
-    print(f'/{c.board} | {c.board_name}, "{c.board_info_outer}", bump limit: {c.bump_limit}')
+{boards}
 ```
 Output:
 ```text
@@ -103,21 +63,7 @@ Output:
 ### Boards Async
 
 ```python3
-import asyncio
-
-from api2ch import Api2chAsync
-
-
-async def main():
-    async with Api2chAsync() as api:
-        coros = [api.catalog(board) for board in ('spc', 'un', 'math')]
-
-        for coro in asyncio.as_completed(coros):
-            c = await coro
-            print(f'/{c.board} | {c.board_name}, "{c.board_info_outer}", bump limit: {c.bump_limit}')
-
-
-asyncio.run(main())
+{boards_async}
 ```
 Output:
 ```text
@@ -129,15 +75,7 @@ Output:
 ### Top threads
 
 ```python3
-from api2ch import Api2ch
-
-api = Api2ch()
-
-boards = api.boards_by_types()
-for board in boards.Art:
-    threads = api.threads(board.id)
-    top_thread = threads.sorted_by_views()[0]
-    print(f'— /{threads.request.board} | {board.name} | Top thread: {top_thread.subject}, {top_thread.views} 👁‍🗨')
+{top}
 ```
 Output:
 ```text
@@ -154,24 +92,7 @@ Output:
 ### Top Threads Async
 
 ```python3
-import asyncio
-
-from api2ch import Api2chAsync
-
-
-async def main():
-    async with Api2chAsync() as api:
-        boards = await api.boards_by_types()
-
-        coros = [api.threads(board.id) for board in boards.Technology]
-
-        for coro in asyncio.as_completed(coros):
-            threads = await coro
-            top_thread = threads.sorted_by_views()[0]
-            print(f'— /{threads.request.board} | Top thread: {top_thread.subject}, {top_thread.views} 👁‍🗨')
-
-
-asyncio.run(main())
+{top_async}
 ```
 Output:
 ```text

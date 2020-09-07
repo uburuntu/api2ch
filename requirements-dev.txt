@@ -1,0 +1,4 @@
+codecov>=2.0
+pytest>=5.4
+pytest-asyncio>=0.12
+pytest-cov>=2.8
