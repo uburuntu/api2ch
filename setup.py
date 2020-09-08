@@ -1,19 +1,22 @@
+import importlib.util
 import os
-from importlib.machinery import SourceFileLoader
+import sys
 
 import setuptools
 from pkg_resources import parse_requirements
 
-module_name = 'api2ch'
 
-module = SourceFileLoader(
-    module_name, os.path.join(module_name, '__init__.py')
-).load_module()
-
-
-def read(filename):
+def read(filename: str) -> str:
     with open(filename, encoding='utf-8') as file:
         return file.read()
+
+
+def get_module(name: str):
+    spec = importlib.util.spec_from_file_location(name, os.path.join(name, '__init__.py'))
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
+    spec.loader.exec_module(module)
+    return module
 
 
 def load_requirements(filename: str) -> list:
@@ -25,6 +28,9 @@ def load_requirements(filename: str) -> list:
         )
     return requirements
 
+
+module_name = 'api2ch'
+module = get_module(module_name)
 
 setuptools.setup(
     name=module_name,
@@ -39,7 +45,6 @@ setuptools.setup(
     url='https://github.com/uburuntu/{}'.format(module_name),
     download_url='https://github.com/uburuntu/{}/archive/master.zip'.format(module_name),
     packages=setuptools.find_packages(exclude=['examples', 'tests']),
-    requires_python='>=3.6',
     install_requires=load_requirements('requirements.txt'),
     extras_require={'dev': load_requirements('requirements-dev.txt')},
     keywords=['2ch', 'dvach', 'api'],
