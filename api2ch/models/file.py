@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Final, Optional
+from typing import Optional
 
 import aiofiles
 import aiohttp
@@ -55,7 +55,7 @@ class File(Base):
 
     @staticmethod
     async def _download_async(url: str, path: Path) -> int:
-        chunk_size: Final = 2 ** 14
+        chunk_size = 2 ** 14
 
         size = 0
         async with aiohttp.ClientSession() as session:
@@ -90,7 +90,7 @@ class File(Base):
 
     @staticmethod
     def _download(url: str, path: Path) -> int:
-        chunk_size: Final = 2 ** 14
+        chunk_size = 2 ** 14
 
         size = 0
         with requests.get(url, stream=True, timeout=5 * 60) as r:
