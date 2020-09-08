@@ -29,8 +29,8 @@ def parse_url(url: str) -> Tuple[bool, str, int]:
     if len(split) < 3:
         return bad
 
-    board, thread = split[1], split[3]
-    if board not in BOARDS or not thread.isdigit():
+    board, method, thread = split[1], split[2], split[3]
+    if board not in BOARDS or method != 'res' or not thread.isdigit():
         return bad
 
     thread_id = int(thread)
