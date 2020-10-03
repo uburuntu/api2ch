@@ -22,6 +22,8 @@ Docs: https://2ch.hk/api/res/1.html
   - [Boards Async](#boards-async)
   - [Top threads](#top-threads)
   - [Top Threads Async](#top-threads-async)
+  - [Complex](#complex)
+  - [Complex Async](#complex-async)
 - [📜 Manual](#-manual)
   - [Methods](#methods)
   - [Types](#types)
@@ -183,6 +185,68 @@ Output:
 — /gd | Top thread: В этом треде ищем напарников для создания своих, 38633 👁
 — /mobi | Top thread: PUBG MOBILE/Пупок мобайл-THREAD, 70643 👁
 ```
+
+### Complex
+
+```python3
+import api2ch
+
+
+api = api2ch.Api2ch()
+
+
+def parse_post(url: str) -> str:
+    valid, board, thread_id = api2ch.parse_url(url)
+    if not valid:
+        raise api2ch.Api2chError(404, 'Invalid URL')
+
+    thread = api.thread(board, thread_id)
+    post = thread.posts[0]
+    text = ''
+
+    text += f'{post.dt().isoformat()} | Пост №{post.post_id}: {post.url(thread.board)}:\n\n'
+    text += f'{post.header}\n' if thread.enable_subject else ''
+    text += f'{post.body_text}\n\n'
+
+    if post.files:
+        text += 'Файлы:\n'
+        for f in post.files:
+            text += f'— {f.original_name}, {f.size_string}: {f.url()}\n'
+
+    return text
+
+
+def pretty_print_post(url: str):
+    try:
+        text = parse_post(url)
+    except api2ch.Api2chError as e:
+        print('Request Error', e.code, e.reason)
+    else:
+        print(text)
+
+
+if __name__ == '__main__':
+    pretty_print_post('https://2ch.hk/cg/res/1323206.html')
+```
+Output:
+```text
+2018-07-19T10:13:24 | Пост №1323206: https://2ch.hk/cg/res/1323206.html#1323206:
+
+Тред для междоусобных холиваров
+Сравниваем платформы, а так же помогаем ньюфагам определиться с выбором приставки и техническими вопросами.
+
+Обязателен к прочтению FAQ раздела: https://2ch.hk/faq/faq_cg.html
+
+Файлы:
+— изображение.png, 84 Кб: https://2ch.hk/cg/src/1323206/15319844042830.png
+```
+
+### Complex Async
+
+[complex_async.py](examples/complex_async.py), same as previous but:
+- `api = api2ch.Api2chAsync()`
+- and `thread = await api.thread(board, thread_id)`
+
 
 ## 📜 Manual
 

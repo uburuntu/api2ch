@@ -105,6 +105,31 @@ Output:
 — /mobi | Top thread: PUBG MOBILE/Пупок мобайл-THREAD, 70643 👁
 ```
 
+### Complex
+
+```python3
+{complex}
+```
+Output:
+```text
+2018-07-19T10:13:24 | Пост №1323206: https://2ch.hk/cg/res/1323206.html#1323206:
+
+Тред для междоусобных холиваров
+Сравниваем платформы, а так же помогаем ньюфагам определиться с выбором приставки и техническими вопросами.
+
+Обязателен к прочтению FAQ раздела: https://2ch.hk/faq/faq_cg.html
+
+Файлы:
+— изображение.png, 84 Кб: https://2ch.hk/cg/src/1323206/15319844042830.png
+```
+
+### Complex Async
+
+[complex_async.py](examples/complex_async.py), same as previous but:
+- `api = api2ch.Api2chAsync()`
+- and `thread = await api.thread(board, thread_id)`
+
+
 ## 📜 Manual
 
 ### Methods
