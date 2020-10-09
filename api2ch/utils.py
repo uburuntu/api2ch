@@ -40,6 +40,7 @@ def parse_url(url: str) -> Tuple[bool, str, int]:
 def convert_html(text: str) -> str:
     """Telegram acceptable HTML code"""
     text = re.sub(r'<br>', '\n', text)
+    text = re.sub(r'&nbsp;', ' ', text)
     text = re.sub(r'&quot;', '\'', text)
     text = re.sub(r'&#47;', '/', text)
 
@@ -55,7 +56,9 @@ def convert_html(text: str) -> str:
 def clear_html(text: str) -> str:
     """Clear text from HTML tags"""
     text = re.sub(r'<br>', '\n', text)
+    text = re.sub(r'&nbsp;', ' ', text)
     text = re.sub(r'&quot;', '\'', text)
     text = re.sub(r'&#47;', '/', text)
+
     text = re.sub(r'<.*?>', '', text)
     return text
