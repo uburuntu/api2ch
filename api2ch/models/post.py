@@ -2,6 +2,7 @@ import datetime
 from typing import List, Optional, Union
 
 from api2ch.config import API_BASE
+from api2ch.models.auxiliary import BannedStatus
 from api2ch.models.base import Base
 from api2ch.models.file import File, Image, Sticker, Video
 from api2ch.utils import clear_html, convert_html
@@ -50,7 +51,7 @@ class Post(Base):
     def url(self, board: str):
         return f'{API_BASE}/{board}/res/{self.parent_id}.html#{self.post_id}'
 
-    banned: int
+    banned: BannedStatus
     closed: bool
     op: bool
     endless: bool

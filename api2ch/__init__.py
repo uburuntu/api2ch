@@ -3,7 +3,7 @@
 from .api import Api2ch, Api2chAsync, Api2chBase, Api2chError
 from .config import API_BASE, BOARDS, api_mirrors, downloads_dir
 from .helpers import download_thread_media
-from .models.auxiliary import NewsAbuItem, Tag, TopItem
+from .models.auxiliary import BannedStatus, NewsAbuItem, Tag, TopItem
 from .models.base import Base, Request, Response
 from .models.board import Board, BoardInfo, BoardInfoBase, BoardInfoMini
 from .models.file import File
@@ -19,4 +19,4 @@ __author__ = 'uburuntu'
 __email__ = 'github@rmbk.me'
 
 __license__ = 'MIT'
-__version__ = '1.1.5'
+__version__ = '1.1.6'

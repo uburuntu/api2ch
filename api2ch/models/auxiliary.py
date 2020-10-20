@@ -1,3 +1,5 @@
+from enum import IntEnum
+
 from api2ch.models.base import Base
 
 
@@ -17,3 +19,9 @@ class TopItem(Base):
 class Tag(Base):
     board: str
     tag: str
+
+
+class BannedStatus(IntEnum):
+    nothing = 0
+    banned = 1
+    warning = 2
