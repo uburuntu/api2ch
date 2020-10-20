@@ -50,7 +50,7 @@ class Post(Base):
     def url(self, board: str):
         return f'{API_BASE}/{board}/res/{self.parent_id}.html#{self.post_id}'
 
-    banned: bool
+    banned: int
     closed: bool
     op: bool
     endless: bool
