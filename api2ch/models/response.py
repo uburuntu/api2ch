@@ -40,6 +40,9 @@ class ResponseThreads(Response):
     def sorted_by_score(self, reverse: bool = True) -> List[ThreadWithStats]:
         return sorted(self.threads, key=lambda t: t.score, reverse=reverse)
 
+    def sorted_by_creation(self, reverse: bool = True) -> List[ThreadWithStats]:
+        return sorted(self.threads, key=lambda t: t.timestamp, reverse=reverse)
+
 
 class ResponseCatalog(Response, BoardInfo):
     filter: str
