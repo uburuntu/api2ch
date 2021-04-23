@@ -49,7 +49,7 @@ def convert_html(text: str) -> str:
 
     text = re.sub(r'</?span.*?>', '', text)
     text = re.sub(r'</?sup>', '', text)
-    text = re.sub(r'</?sup>', '', text)
+    text = re.sub(r'</?sub>', '', text)
     return text
 
 
