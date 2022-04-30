@@ -36,7 +36,9 @@ Docs: https://2ch.hk/api/res/1.html
 ---
 
 ## 🎒 Installation
+
 Just
+
 ```
 pip install api2ch
 ```
@@ -54,7 +56,9 @@ resp = api.threads('vg')
 for t in resp.threads[:3]:
     print(f'— {t.subject}, {t.posts_count} 💬, {t.views} 👁')
 ```
+
 Output:
+
 ```text
 — Paradox Thread №6 стрессовый, 771 💬, 1879 👁
 — BioWare General: Varric Tethras Edition, 207 💬, 644 👁
@@ -78,7 +82,9 @@ async def main():
 
 asyncio.run(main())
 ```
+
 Output:
+
 ```text
 — Видеокарты AMD #95, 418 💬, 3778 👁
 — Сап. Впервые в этом разделе. Как научится разбираться в железе?, 3 💬, 9 👁
@@ -96,7 +102,9 @@ for board in ('tv', 'hw', 'fiz'):
     c = api.catalog(board)
     print(f'/{c.board} | {c.board_name}, "{c.board_info_outer}", bump limit: {c.bump_limit}')
 ```
+
 Output:
+
 ```text
 /tv | Сериалы, "сериалы для домохозяек, игры престолов в /got/", bump limit: 500
 /hw | Компьютерное железо, "железо, видеокарты, ноутбуки, intel, amd, nvidia, ati", bump limit: 500
@@ -122,7 +130,9 @@ async def main():
 
 asyncio.run(main())
 ```
+
 Output:
+
 ```text
 /un | Образование, "образование, вуз, школа, поступление, гиа, егэ, уже не школьник", bump limit: 500
 /spc | Космос и астрономия, "космос, астрономия, вселенные, звезды, огурцы", bump limit: 500
@@ -142,7 +152,9 @@ for board in boards.Art:
     top_thread = threads.sorted_by_views()[0]
     print(f'— /{threads.request.board} | {board.name} | Top thread: {top_thread.subject}, {top_thread.views} 👁')
 ```
+
 Output:
+
 ```text
 — /di | Столовая | Top thread: НОВОЙ БАНОЧКИ НИТЬ ИДИ, 123475 👁
 — /de | Дизайн | Top thread: Зарплата, 48958 👁
@@ -176,7 +188,9 @@ async def main():
 
 asyncio.run(main())
 ```
+
 Output:
+
 ```text
 — /ra | Top thread: OsmocomBB - Motorola, 1517590 👁
 — /hw | Top thread: VR тред возрожденный #4, 17638 👁
@@ -191,7 +205,6 @@ Output:
 
 ```python3
 import api2ch
-
 
 api = api2ch.Api2ch()
 
@@ -229,7 +242,9 @@ def pretty_print_post(url: str):
 if __name__ == '__main__':
     pretty_print_post('https://2ch.hk/cg/res/1323206.html')
 ```
+
 Output:
+
 ```text
 2018-07-19T10:13:24 | Пост №1323206: https://2ch.hk/cg/res/1323206.html#1323206:
 
@@ -245,14 +260,16 @@ Output:
 ### Complex Async
 
 [complex_async.py](examples/complex_async.py), same as previous but:
+
 - `api = api2ch.Api2chAsync()`
 - and `thread = await api.thread(board, thread_id)`
-
 
 ## 📜 Manual
 
 ### Methods
+
 `Api2ch` methods (and same for `Api2chAsync` but with `async`):
+
 ```python3
 class Api2ch(Api2chBase):
     ...
@@ -279,6 +296,7 @@ class Api2ch(Api2chBase):
 ```
 
 Also available method `download_thread_media` (default path: `./dowloads_2ch/%thread_id%/`):
+
 ```python3
 from api2ch import download_thread_media
 
@@ -286,18 +304,20 @@ download_thread_media(url='https://2ch.hk/api/res/1.html', with_thumbnails=True,
 ```
 
 ### Types
-This library uses [pydantic](https://github.com/samuelcolvin/pydantic/) for parsing API responses.
-You can see data models in [api2ch/models](api2ch/models).
+
+This library uses [pydantic](https://github.com/samuelcolvin/pydantic/) for parsing API responses. You can see data models in [api2ch/models](api2ch/models).
 
 ### In case of unsupported types
-API results can change and the library may not parse the new result. So you can request «raw» dicts: 
+
+API results can change and the library may not parse the new result. So you can request «raw» dicts:
+
 ```python3
 api = Api2ch(raw_results=True)
 ```
 
 ## 💬 Contributing
 
-Contributions, issues and feature requests are welcome! 
+Contributions, issues and feature requests are welcome!
 
 ## 📝 License
 

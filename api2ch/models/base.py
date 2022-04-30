@@ -3,12 +3,8 @@ from typing import Any, Optional
 from pydantic import BaseConfig, BaseModel, Extra
 
 
-# from typing import Union
-# from api2ch.api import Api2ch, Api2chAsync
-
-
 class Base(BaseModel):
-    api: Optional[Any]  # Optional[Union[Api2ch, Api2chAsync]]
+    api: Optional[Any]
 
     class Config(BaseConfig):
         anystr_strip_whitespace = True

@@ -1,6 +1,5 @@
 import api2ch
 
-
 api = api2ch.Api2ch()
 
 

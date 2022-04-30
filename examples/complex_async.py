@@ -2,7 +2,6 @@ import asyncio
 
 import api2ch
 
-
 api = api2ch.Api2chAsync()
 
 
