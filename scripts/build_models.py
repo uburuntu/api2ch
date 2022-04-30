@@ -22,7 +22,7 @@ if __name__ == '__main__':
     https://2ch.hk/доска/catalog.json
     Все треды с сортировкой по времени создания треда:
     https://2ch.hk/доска/catalog_num.json
-    Все треды с доски(облегченный вариант, с просмотрами и рейтингом для топа тредов):
+    Все треды с доски (облегченный вариант, с просмотрами и рейтингом для топа тредов):
     https://2ch.hk/доска/threads.json
     
     -- Мобильное API
@@ -50,6 +50,6 @@ if __name__ == '__main__':
     )
 
     for url, name in methods:
-        result = requests.get(url).text
-        result = translit(result, 'ru', reversed=True, strict=True)
-        generate_model(name, result, output=output_dir / f'_{name}.py')
+        schema = requests.get(url).text
+        schema = translit(schema, 'ru', reversed=True, strict=True)
+        generate_model(schema, output=output_dir / f'_{name}.py')
