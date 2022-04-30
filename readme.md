@@ -1,10 +1,11 @@
 # api2ch
 
-[![Python](https://img.shields.io/badge/Python-3.6%20%7C%203.7%20%7C%203.8-blue.svg?longCache=true)]()
+[![Python](https://img.shields.io/badge/Python-3.6%20%7C%203.7%20%7C%203.8%20%7C%203.9%20%7C%203.10%20%7C%203.11-blue.svg?longCache=true)]()
 [![PyPI](https://img.shields.io/pypi/v/api2ch.svg)](https://pypi.python.org/pypi/api2ch)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-[![Build Status](https://travis-ci.org/uburuntu/api2ch.svg?branch=master)](https://travis-ci.org/uburuntu/api2ch)
+[![Python Tests](https://github.com/uburuntu/api2ch/actions/workflows/tests.yml/badge.svg)](https://github.com/uburuntu/api2ch/actions/workflows/tests.yml)
+[![codecov](https://codecov.io/gh/uburuntu/api2ch/branch/master/graph/badge.svg)](https://codecov.io/gh/uburuntu/api2ch)
 
 ⚡️ Async API Wrapper for 2ch Imageboard with typings
 
