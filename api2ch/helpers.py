@@ -7,11 +7,17 @@ from api2ch.models.file import File
 from api2ch.utils import parse_url, prettify_bytes
 
 
-def download_thread_media(url: str, path: Path = downloads_dir, with_thumbnails: bool = False, skip_if_exists: bool = True):
+def download_thread_media(
+        url: str,
+        path: Path = downloads_dir,
+        with_thumbnails: bool = False,
+        skip_if_exists: bool = True,
+        concurrent_downloads: int = 10,
+) -> str:
     valid, board, thread_id = parse_url(url)
 
     if not valid:
-        return
+        return '0 Б'
 
     path.mkdir(parents=True, exist_ok=True)
     if not path.is_dir():
@@ -19,7 +25,7 @@ def download_thread_media(url: str, path: Path = downloads_dir, with_thumbnails:
     path = path / f'{board}_{thread_id}'
     path.mkdir(parents=True, exist_ok=True)
 
-    async def download(concurrent_downloads: int = 10):
+    async def download():
         s = asyncio.Semaphore(concurrent_downloads)
 
         async def download_single(file: File):
