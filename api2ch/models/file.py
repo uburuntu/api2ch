@@ -148,6 +148,14 @@ class Video(File):
     def original_name(self) -> str:
         return self.fullname
 
+    @property
+    def is_webm(self) -> bool:
+        return self.type == 6
+
+    @property
+    def is_mp4(self) -> bool:
+        return self.type == 10
+
     @validator('type')
     def type_check(cls, v):
         assert v in (6, 10)
