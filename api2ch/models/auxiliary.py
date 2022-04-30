@@ -3,14 +3,14 @@ from enum import IntEnum
 from api2ch.models.base import Base
 
 
-class NewsAbuItem(Base):
+class NewsAbu(Base):
     date: str
     num: int
     subject: str
     views: int
 
 
-class TopItem(Base):
+class Top(Base):
     board: str
     info: str
     name: str

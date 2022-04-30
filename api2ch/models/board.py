@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from pydantic import Field
 
-from api2ch.models.auxiliary import NewsAbuItem, TopItem, Icon
+from api2ch.models.auxiliary import NewsAbu, Top, Icon
 from api2ch.models.base import Base
 
 
@@ -50,8 +50,8 @@ class BoardInfo(BoardInfoBase):
     enable_video: bool
     max_comment: int
     max_files_size: int
-    news_abu: List[NewsAbuItem]
-    top: List[TopItem]
+    news_abu: List[NewsAbu]
+    top: List[Top]
 
 
 class Board(Base):
