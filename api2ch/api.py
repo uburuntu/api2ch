@@ -29,6 +29,24 @@ class Api2chBase:
     def __init__(self, raw_results: bool = False):
         self.raw = raw_results
 
+    def set_api_base(self, api_base: str):
+        """
+        List of possible mirrors for API base:
+        - https://2ch.hk
+        - https://2ch.pm
+        - https://2ch.re
+        - https://2ch.tf
+        - https://2ch.wf
+        - https://2ch.yt
+        - https://2-ch.so
+        """
+        self.api_base = api_base
+        return self
+
+    def reset_api_base(self):
+        self.api_base = API_BASE
+        return self
+
 
 class Api2ch(Api2chBase):
     @property
