@@ -142,7 +142,7 @@ class Video(File):
     md5: str
     nsfw: bool
     duration: Optional[str]
-    duration_secs: Optional[str]
+    duration_secs: Optional[int]
 
     @property
     def original_name(self) -> str:
