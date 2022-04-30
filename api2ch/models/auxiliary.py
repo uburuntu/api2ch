@@ -25,3 +25,9 @@ class BannedStatus(IntEnum):
     nothing = 0
     banned = 1
     warning = 2
+
+
+class Icon(Base):
+    name: str
+    num: int
+    url: str

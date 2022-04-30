@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from pydantic import Field
 
-from api2ch.models.auxiliary import NewsAbuItem, TopItem
+from api2ch.models.auxiliary import NewsAbuItem, TopItem, Icon
 from api2ch.models.base import Base
 
 
@@ -25,7 +25,7 @@ class BoardInfoBase(Base):
 
 class BoardInfoMini(BoardInfoBase):
     category: str
-    icons: List
+    icons: List[Icon]
     id: str
     name: str
     pages: int
