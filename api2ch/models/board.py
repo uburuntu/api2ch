@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from pydantic import Field
 
@@ -40,8 +40,8 @@ class BoardInfo(BoardInfoBase):
     board_name: str = Field(alias='BoardName')
     advert_bottom_image: str
     advert_bottom_link: str
-    advert_mobile_image: str
-    advert_mobile_link: str
+    advert_mobile_image: Optional[str]
+    advert_mobile_link: Optional[str]
     advert_top_image: str
     advert_top_link: str
     board_banner_image: str
