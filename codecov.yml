@@ -1,3 +1,13 @@
+# Docs:
+# - https://docs.codecov.com/docs/codecov-yaml
+# Validation:
+# - curl -X POST --data-binary @codecov.yml https://codecov.io/validate
+
+coverage:
+  status:
+    project:
+      informational: true
+
 ignore:
   - 'examples'
   - 'setup.py'
