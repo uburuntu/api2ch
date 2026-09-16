@@ -2,6 +2,8 @@ import pytest
 
 from api2ch import Api2chAsync, Api2chError
 
+pytestmark = pytest.mark.integration
+
 
 @pytest.mark.asyncio
 class TestApiAsync:

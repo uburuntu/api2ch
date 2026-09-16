@@ -1,49 +1,50 @@
-import importlib.util
-import os
-import sys
+import ast
+from pathlib import Path
 
 import setuptools
-from pkg_resources import parse_requirements
 
 
 def read(filename: str) -> str:
-    with open(filename, encoding='utf-8') as file:
-        return file.read()
+    return Path(filename).read_text(encoding='utf-8')
 
 
-def get_module(name: str):
-    spec = importlib.util.spec_from_file_location(name, os.path.join(name, '__init__.py'))
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[name] = module
-    spec.loader.exec_module(module)
-    return module
+def load_metadata(filename: str) -> dict:
+    tree = ast.parse(read(filename))
+    metadata = {'__doc__': ast.get_docstring(tree)}
+
+    for node in tree.body:
+        if not isinstance(node, ast.Assign) or len(node.targets) != 1:
+            continue
+        target = node.targets[0]
+        if isinstance(target, ast.Name) and target.id.startswith('__'):
+            metadata[target.id] = ast.literal_eval(node.value)
+
+    return metadata
 
 
 def load_requirements(filename: str) -> list:
-    requirements = []
-    for req in parse_requirements(read(filename)):
-        extras = '[{}]'.format(','.join(req.extras)) if req.extras else ''
-        requirements.append(
-            '{}{}{}'.format(req.name, extras, req.specifier)
-        )
-    return requirements
+    return [
+        line
+        for line in (line.strip() for line in read(filename).splitlines())
+        if line and not line.startswith('#')
+    ]
 
 
 module_name = 'api2ch'
-module = get_module(module_name)
+metadata = load_metadata(f'{module_name}/__init__.py')
 
 setuptools.setup(
     name=module_name,
-    version=module.__version__,
-    author=module.__author__,
-    author_email=module.__email__,
-    license=module.__license__,
-    description=module.__doc__,
+    version=metadata['__version__'],
+    author=metadata['__author__'],
+    author_email=metadata['__email__'],
+    license=metadata['__license__'],
+    description=metadata['__doc__'],
     platforms='all',
     long_description=read('readme.md'),
     long_description_content_type='text/markdown',
-    url='https://github.com/uburuntu/{}'.format(module_name),
-    download_url='https://github.com/uburuntu/{}/archive/master.zip'.format(module_name),
+    url=f'https://github.com/uburuntu/{module_name}',
+    download_url=f'https://github.com/uburuntu/{module_name}/archive/master.zip',
     packages=setuptools.find_packages(exclude=['examples', 'tests']),
     install_requires=load_requirements('requirements.txt'),
     extras_require={'dev': load_requirements('requirements-dev.txt')},

@@ -1,4 +1,5 @@
 import pytest
+import pytest_asyncio
 
 from api2ch import Api2ch, Api2chAsync
 
@@ -9,7 +10,7 @@ def api():
         yield api
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def api_async():
     async with Api2chAsync() as api:
         yield api

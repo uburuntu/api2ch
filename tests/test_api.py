@@ -2,6 +2,8 @@ import pytest
 
 from api2ch import Api2ch, Api2chError
 
+pytestmark = pytest.mark.integration
+
 
 class TestApi:
     def test_thread(self, api: Api2ch):
