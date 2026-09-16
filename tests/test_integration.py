@@ -40,6 +40,9 @@ async def test_live_async_contract() -> None:
         summaries = await api.threads(board)
         assert summaries.threads
         thread_id = summaries.threads[0].num
+        assert (await api.catalog(board)).board.id == board
+        assert (await api.catalog_by_date(board)).board.id == board
+        assert (await api.page(board)).board.id == board
         thread = await api.thread(board, thread_id)
         assert thread.posts[0].num == thread_id
         assert (await api.thread_info(board, thread_id)).num == thread_id
