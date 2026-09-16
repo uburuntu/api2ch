@@ -1,6 +1,70 @@
 [build-system]
-requires = [
-    "setuptools==84.0.0",
-    "wheel==0.48.0",
+requires = ["hatchling==1.32.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "api2ch"
+version = "2.0.0"
+description = "Typed synchronous and asynchronous clients for the read-only 2ch API"
+readme = "readme.md"
+requires-python = ">=3.14"
+license = "MIT"
+authors = [{ name = "uburuntu", email = "github@rmbk.me" }]
+keywords = ["2ch", "dvach", "api", "asyncio"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Framework :: AsyncIO",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.14",
+    "Typing :: Typed",
 ]
-build-backend = "setuptools.build_meta"
+dependencies = [
+    "anyio>=4.15.1,<5",
+    "httpx>=0.28.1,<0.29",
+    "pydantic>=2.13.5,<3",
+    "typing-extensions>=4.15,<5",
+]
+
+[project.optional-dependencies]
+dev = [
+    "build>=1.6,<2",
+    "mypy>=2.3.1,<3",
+    "pytest>=9.1.1,<10",
+    "pytest-asyncio>=1.4,<2",
+    "pytest-cov>=7,<8",
+    "ruff>=0.16.8,<0.17",
+    "twine>=7,<8",
+]
+
+[project.urls]
+Homepage = "https://github.com/uburuntu/api2ch"
+Issues = "https://github.com/uburuntu/api2ch/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["api2ch"]
+
+[tool.hatch.build.targets.sdist]
+include = ["api2ch", "tests", "LICENSE", "readme.md", "RELEASING.md", "docs"]
+
+[tool.pytest.ini_options]
+addopts = "-ra --strict-markers"
+asyncio_mode = "strict"
+markers = ["integration: calls the live 2ch API"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "RUF"]
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+packages = ["api2ch"]
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false

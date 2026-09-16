@@ -1,7 +1,5 @@
 from api2ch import Api2ch
 
-api = Api2ch()
-
-resp = api.threads('vg')
-for t in resp.threads[:3]:
-    print(f'— {t.subject}, {t.posts_count} 💬, {t.views} 👁')
+with Api2ch() as api:
+    for thread in api.threads("pr").sorted_by_views()[:3]:
+        print(thread.num, thread.header, thread.views)

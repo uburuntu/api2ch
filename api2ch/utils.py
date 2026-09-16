@@ -1,64 +1,59 @@
+import html
 import re
-from typing import Tuple
-from urllib.parse import ParseResult, urlparse
+from html.parser import HTMLParser
+from urllib.parse import urlparse
 
-from api2ch.config import BOARDS, hostname_mirrors
+from api2ch.config import hostname_mirrors
+
+
+class _TextExtractor(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.parts: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag == "br":
+            self.parts.append("\n")
+
+    def handle_data(self, data: str) -> None:
+        self.parts.append(data)
 
 
 def prettify_bytes(size: float) -> str:
-    for unit in ('Б', 'Кб', 'Мб', 'Гб', 'Тб'):
-        if size < 1024.0:
-            break
+    units = ("B", "KiB", "MiB", "GiB", "TiB")
+    index = 0
+    while size >= 1024.0 and index < len(units) - 1:
         size /= 1024.0
-    return f'{size:.0f} {unit}' if unit in ('Б', 'Кб') else f'{size:.2f} {unit}'
+        index += 1
+    unit = units[index]
+    return f"{size:.0f} {unit}" if unit in {"B", "KiB"} else f"{size:.2f} {unit}"
 
 
-def parse_url(url: str) -> Tuple[bool, str, int]:
-    """
-    Parse url with checks
-    :param url: example: 'https://2ch.hk/api/res/1.html'
-    :return: is_valid, board, thread_id
-    """
-    result: ParseResult = urlparse(url)
-    bad = False, '', 0
+def parse_url(url: str) -> tuple[bool, str, int]:
+    """Parse a 2ch thread URL without relying on a frozen board list."""
 
-    if result.hostname not in hostname_mirrors:
-        return bad
+    parsed = urlparse(url)
+    if parsed.scheme not in {"http", "https"} or parsed.hostname not in hostname_mirrors:
+        return False, "", 0
 
-    split = re.split('[/.]', result.path)
-    if len(split) < 3:
-        return bad
-
-    board, method, thread = split[1], split[2], split[3]
-    if board not in BOARDS or method != 'res' or not thread.isdigit():
-        return bad
-
-    thread_id = int(thread)
-    return True, board, thread_id
-
-
-def convert_html(text: str) -> str:
-    """Telegram acceptable HTML code"""
-    text = re.sub(r'<br>', '\n', text)
-    text = re.sub(r'&nbsp;', ' ', text)
-    text = re.sub(r'&quot;', '\'', text)
-    text = re.sub(r'&#47;', '/', text)
-
-    text = re.sub(r'<(/?)strong>', r'<\1b>', text)
-    text = re.sub(r'<(/?)em>', r'<\1i>', text)
-
-    text = re.sub(r'</?span.*?>', '', text)
-    text = re.sub(r'</?sup>', '', text)
-    text = re.sub(r'</?sub>', '', text)
-    return text
+    match = re.fullmatch(r"/([a-z0-9_]+)/res/([1-9][0-9]*)\.html/?", parsed.path)
+    if match is None:
+        return False, "", 0
+    return True, match.group(1), int(match.group(2))
 
 
 def clear_html(text: str) -> str:
-    """Clear text from HTML tags"""
-    text = re.sub(r'<br>', '\n', text)
-    text = re.sub(r'&nbsp;', ' ', text)
-    text = re.sub(r'&quot;', '\'', text)
-    text = re.sub(r'&#47;', '/', text)
+    parser = _TextExtractor()
+    parser.feed(text)
+    parser.close()
+    return "".join(parser.parts)
 
-    text = re.sub(r'<.*?>', '', text)
-    return text
+
+def convert_html(text: str) -> str:
+    """Convert the small upstream markup subset to conservative rich text."""
+
+    converted = re.sub(r"<br\s*/?>", "\n", text, flags=re.IGNORECASE)
+    converted = re.sub(r"<(\/?)strong>", r"<\1b>", converted, flags=re.IGNORECASE)
+    converted = re.sub(r"<(\/?)em>", r"<\1i>", converted, flags=re.IGNORECASE)
+    converted = re.sub(r"</?(?:span|sup|sub)(?:\s[^>]*)?>", "", converted, flags=re.IGNORECASE)
+    return html.unescape(converted)

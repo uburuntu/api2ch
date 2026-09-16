@@ -3,11 +3,11 @@ import asyncio
 from api2ch import Api2chAsync
 
 
-async def main():
+async def main() -> None:
     async with Api2chAsync() as api:
-        resp = await api.threads('hw')
-        for t in resp.threads[:3]:
-            print(f'— {t.subject}, {t.posts_count} 💬, {t.views} 👁')
+        threads = await api.threads("hw")
+        for thread in threads.sorted_by_views()[:3]:
+            print(thread.num, thread.header, thread.views)
 
 
 asyncio.run(main())

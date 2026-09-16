@@ -1,8 +1,0 @@
-build>=1.6,<2
-datamodel-code-generator>=0.54,<1
-pytest>=9.1,<10
-pytest-asyncio>=1.4,<2
-pytest-cov>=7,<8
-ruff>=0.16.8,<0.17
-transliterate>=1.10,<2
-twine>=7,<8
