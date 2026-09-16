@@ -1,7 +1,0 @@
-datamodel_code_generator>=0.12
-codecov>=2.0
-flake8>=4.0
-pytest>=5.4
-pytest-asyncio>=0.12
-pytest-cov>=2.8
-transliterate>=1.10

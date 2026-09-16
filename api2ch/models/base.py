@@ -1,34 +1,7 @@
-from typing import Any, Optional
-
-from pydantic import BaseConfig, BaseModel, Extra
+from pydantic import BaseModel, ConfigDict
 
 
 class Base(BaseModel):
-    api: Optional[Any]
+    """Base for the evolving upstream response models."""
 
-    class Config(BaseConfig):
-        anystr_strip_whitespace = True
-        extra = Extra.allow
-        use_enum_values = True
-
-
-class Response(Base):
-    request: Optional['Request']
-
-
-class Request(Base):
-    __returning__ = Response
-
-    def url(self, base: str) -> str:
-        raise NotImplementedError
-
-    def do(self, api=None) -> __returning__:
-        api = api or self.api
-        return api.request(self)
-
-    async def do_async(self, api=None) -> __returning__:
-        api = api or self.api
-        return await api.request(self)
-
-
-Response.update_forward_refs()
+    model_config = ConfigDict(extra="allow", populate_by_name=True)

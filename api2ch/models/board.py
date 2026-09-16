@@ -1,69 +1,39 @@
-from typing import List, Optional
-
 from pydantic import Field
 
-from api2ch.models.auxiliary import NewsAbu, Top, Icon
+from api2ch.models.auxiliary import Icon
 from api2ch.models.base import Base
 
 
-class BoardInfoBase(Base):
-    bump_limit: int
-    default_name: str
-    enable_dices: bool
-    enable_flags: bool
-    enable_icons: bool
-    enable_likes: bool
-    enable_names: bool
-    enable_oekaki: bool
-    enable_posting: bool
-    enable_sage: bool
-    enable_shield: bool
-    enable_subject: bool
-    enable_thread_tags: bool
-    enable_trips: bool
-
-
-class BoardInfoMini(BoardInfoBase):
-    category: str
-    icons: List[Icon]
+class Board(Base):
     id: str
     name: str
-    pages: int
-    sage: int
-    tripcodes: int
-
-
-class BoardInfo(BoardInfoBase):
-    board: str = Field(alias='Board')
-    board_info: str = Field(alias='BoardInfo')
-    board_info_outer: str = Field(alias='BoardInfoOuter')
-    board_name: str = Field(alias='BoardName')
-    advert_bottom_image: str
-    advert_bottom_link: str
-    advert_mobile_image: Optional[str]
-    advert_mobile_link: Optional[str]
-    advert_top_image: str
-    advert_top_link: str
-    board_banner_image: str
-    board_banner_link: str
-    enable_images: bool
-    enable_video: bool
+    category: str
+    info: str = ""
+    info_outer: str = ""
+    threads_per_page: int
+    bump_limit: int
+    max_pages: int
+    default_name: str
+    enable_names: bool
+    enable_trips: bool
+    enable_subject: bool
+    enable_sage: bool
+    enable_icons: bool
+    enable_flags: bool
+    enable_dices: bool
+    enable_shield: bool
+    enable_thread_tags: bool
+    enable_posting: bool
+    enable_likes: bool
+    enable_oekaki: bool
+    file_types: list[str] = Field(default_factory=list)
     max_comment: int
     max_files_size: int
-    news_abu: List[NewsAbu]
-    top: List[Top]
+    tags: list[str] = Field(default_factory=list)
+    icons: list[Icon] = Field(default_factory=list)
 
 
-class Board(Base):
-    bump_limit: int
-    category: str
-    default_name: str
-    enable_names: int
-    enable_sage: int
-    id: str
-    info: str
-    last_num: int
-    name: str
-    speed: int
-    threads: int
-    unique_posters: int
+# Compatibility names for code that imported the 1.x model hierarchy.
+BoardInfoBase = Board
+BoardInfoMini = Board
+BoardInfo = Board

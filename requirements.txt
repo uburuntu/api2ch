@@ -1,4 +1,0 @@
-aiofiles>=0.5
-aiohttp>=3.6
-pydantic>=1.6
-requests>=2.24

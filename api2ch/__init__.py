@@ -1,22 +1,47 @@
-"""Async API Wrapper for 2ch Imageboard with typings"""
+"""Typed synchronous and asynchronous clients for the read-only 2ch API."""
 
-from .api import Api2ch, Api2chAsync, Api2chBase, Api2chError
-from .config import API_BASE, BOARDS, api_mirrors, downloads_dir
-from .helpers import download_thread_media
-from .models.auxiliary import BannedStatus, NewsAbu, Tag, Top
-from .models.base import Base, Request, Response
-from .models.board import Board, BoardInfo, BoardInfoBase, BoardInfoMini
-from .models.file import File
-from .models.post import Post
-from .models.request import RequestBoards, RequestBoardsByTypes, RequestCatalog, RequestCatalogByDate, RequestPage, RequestSinglePost, \
-    RequestThread, RequestThreadPostsByNum, RequestThreadPostsByPost, RequestThreads
-from .models.response import ResponseBoards, ResponseBoardsByTypes, ResponseCatalog, ResponseCatalogByDate, ResponsePage, \
-    ResponseSinglePost, ResponseThread, ResponseThreadPostsByNum, ResponseThreadPostsByPost, ResponseThreads
-from .models.thread import Thread, ThreadWithStats
-from .utils import clear_html, convert_html, parse_url
+from api2ch.api import (
+    Api2ch,
+    Api2chAsync,
+    Api2chError,
+    Api2chHTTPError,
+    Api2chResponseError,
+    Api2chTimeoutError,
+    Api2chTransportError,
+    Api2chUpstreamError,
+    Api2chValidationError,
+)
+from api2ch.config import API_BASE, api_mirrors, downloads_dir
+from api2ch.downloads import DownloadResult, download_file, download_file_async
+from api2ch.helpers import ThreadDownloadResult, download_thread_media
+from api2ch.models import *  # noqa: F403
+from api2ch.utils import clear_html, convert_html, parse_url, prettify_bytes
 
-__author__ = 'uburuntu'
-__email__ = 'github@rmbk.me'
+__author__ = "uburuntu"
+__email__ = "github@rmbk.me"
+__license__ = "MIT"
+__version__ = "2.0.0"
 
-__license__ = 'MIT'
-__version__ = '1.2.1'
+__all__ = [
+    "API_BASE",
+    "Api2ch",
+    "Api2chAsync",
+    "Api2chError",
+    "Api2chHTTPError",
+    "Api2chResponseError",
+    "Api2chTimeoutError",
+    "Api2chTransportError",
+    "Api2chUpstreamError",
+    "Api2chValidationError",
+    "DownloadResult",
+    "ThreadDownloadResult",
+    "api_mirrors",
+    "clear_html",
+    "convert_html",
+    "download_file",
+    "download_file_async",
+    "download_thread_media",
+    "downloads_dir",
+    "parse_url",
+    "prettify_bytes",
+]

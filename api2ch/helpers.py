@@ -1,50 +1,44 @@
-import asyncio
+from dataclasses import dataclass
 from pathlib import Path
 
-from api2ch.api import Api2chAsync
+from api2ch.api import Api2ch
 from api2ch.config import downloads_dir
-from api2ch.models.file import File
-from api2ch.utils import parse_url, prettify_bytes
+from api2ch.downloads import DownloadResult, download_file
+from api2ch.utils import parse_url
+
+
+@dataclass(frozen=True, slots=True)
+class ThreadDownloadResult:
+    files: tuple[DownloadResult, ...]
+
+    @property
+    def bytes_written(self) -> int:
+        return sum(item.bytes_written for item in self.files if not item.skipped)
 
 
 def download_thread_media(
-        url: str,
-        path: Path = downloads_dir,
-        with_thumbnails: bool = False,
-        skip_if_exists: bool = True,
-        concurrent_downloads: int = 10,
-) -> str:
+    url: str,
+    path: Path = downloads_dir,
+    *,
+    skip_if_exists: bool = True,
+) -> ThreadDownloadResult:
     valid, board, thread_id = parse_url(url)
-
     if not valid:
-        return '0 Б'
+        raise ValueError("url is not a valid 2ch thread URL")
 
-    path.mkdir(parents=True, exist_ok=True)
-    if not path.is_dir():
-        path = path.parent
-    path = path / f'{board}_{thread_id}'
-    path.mkdir(parents=True, exist_ok=True)
-
-    async def download():
-        s = asyncio.Semaphore(concurrent_downloads)
-
-        async def download_single(file: File):
-            async with s:
-                size_ = await file.download_async(path, skip_if_exists)
-                if with_thumbnails:
-                    size_ += await file.download_thumbnail_async(path, skip_if_exists)
-                return size_
-
-        async with Api2chAsync() as api:
-            t = await api.thread(board, thread_id)
-
-            coros = []
-            for p in t.posts:
-                for f in p.files:
-                    coros.append(download_single(f))
-
-            return await asyncio.gather(*coros)
-
-    loop = asyncio.get_event_loop()
-    size = sum(loop.run_until_complete(download()))
-    return prettify_bytes(size)
+    destination = path / f"{board}_{thread_id}"
+    results: list[DownloadResult] = []
+    with Api2ch() as api:
+        response = api.thread(board, thread_id)
+        for post in response.posts:
+            for file in post.files:
+                results.append(
+                    download_file(
+                        file,
+                        destination,
+                        base_url=api.api_base,
+                        skip_if_exists=skip_if_exists,
+                        client=api.client,
+                    )
+                )
+    return ThreadDownloadResult(tuple(results))

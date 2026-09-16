@@ -1,124 +1,99 @@
-from typing import List, Optional
+from pydantic import Field
 
-from pydantic import BaseModel, Field, validator
-
-from api2ch.models.auxiliary import Tag
-from api2ch.models.base import Response
-from api2ch.models.board import Board, BoardInfo, BoardInfoMini
+from api2ch.models.auxiliary import ThreadInfo, UpstreamError
+from api2ch.models.base import Base
+from api2ch.models.board import Board
 from api2ch.models.post import Post
-from api2ch.models.thread import Thread, ThreadWithStats
+from api2ch.models.thread import Thread, ThreadSummary
 
 
-class ResponseThread(Response, BoardInfo):
-    current_thread: str
+class ResponseThread(Base):
+    board: Board
+    current_thread: int
     files_count: int
-    is_board: int
+    is_board: bool
     is_closed: int
-    is_index: int
+    is_index: bool
     max_num: int
     posts_count: int
     thread_first_image: str
-    threads: List[Thread]
+    threads: list[Thread]
     title: str
-    unique_posters: str
+    unique_posters: int | str
+    advert_mobile_image: str | None = None
+    advert_mobile_link: str | None = None
+    board_banner_image: str | None = None
+    board_banner_link: str | None = None
 
     @property
-    def posts(self) -> List[Post]:
-        return self.threads[0].posts
+    def posts(self) -> list[Post]:
+        return self.threads[0].posts if self.threads else []
 
 
-class ResponseThreads(Response):
+class ResponseThreads(Base):
     board: str
-    threads: List[ThreadWithStats]
+    threads: list[ThreadSummary]
 
-    def sorted_by_views(self, reverse: bool = True) -> List[ThreadWithStats]:
-        return sorted(self.threads, key=lambda t: t.views, reverse=reverse)
+    def sorted_by_views(self, reverse: bool = True) -> list[ThreadSummary]:
+        return sorted(self.threads, key=lambda thread: thread.views, reverse=reverse)
 
-    def sorted_by_posts_count(self, reverse: bool = True) -> List[ThreadWithStats]:
-        return sorted(self.threads, key=lambda t: t.posts_count, reverse=reverse)
+    def sorted_by_posts_count(self, reverse: bool = True) -> list[ThreadSummary]:
+        return sorted(self.threads, key=lambda thread: thread.posts_count, reverse=reverse)
 
-    def sorted_by_score(self, reverse: bool = True) -> List[ThreadWithStats]:
-        return sorted(self.threads, key=lambda t: t.score, reverse=reverse)
+    def sorted_by_score(self, reverse: bool = True) -> list[ThreadSummary]:
+        return sorted(self.threads, key=lambda thread: thread.score, reverse=reverse)
 
-    def sorted_by_creation(self, reverse: bool = True) -> List[ThreadWithStats]:
-        return sorted(self.threads, key=lambda t: t.timestamp, reverse=reverse)
+    def sorted_by_creation(self, reverse: bool = True) -> list[ThreadSummary]:
+        return sorted(self.threads, key=lambda thread: thread.timestamp, reverse=reverse)
 
 
-class ResponseCatalog(Response, BoardInfo):
+class ResponseCatalog(Base):
+    board: Board
     filter: str
-    threads: List[Thread]
+    threads: list[Post]
+    advert_mobile_image: str | None = None
+    advert_mobile_link: str | None = None
+    board_banner_image: str | None = None
+    board_banner_link: str | None = None
 
 
-class ResponseCatalogByDate(Response, BoardInfo):
-    filter: str
-    threads: List[Thread]
+ResponseCatalogByDate = ResponseCatalog
 
 
-class ResponsePage(Response, BoardInfo):
+class ResponsePage(Base):
+    board: Board
     board_speed: int
     current_page: int
     current_thread: int
     is_board: bool
     is_index: bool
-    pages: List[int]
-    threads: List[Thread]
+    pages: list[int]
+    threads: list[Thread]
+    advert_mobile_image: str | None = None
+    advert_mobile_link: str | None = None
+    board_banner_image: str | None = None
+    board_banner_link: str | None = None
 
 
-class ResponseBoards(Response):
-    boards: List[Board]
-    global_boards: int
-    global_posts: str
-    global_speed: str
-    is_index: int
-    tags: List[Tag]
-    type: int
+class ResponseThreadInfo(Base):
+    result: int
+    thread: ThreadInfo | None = None
+    error: UpstreamError | None = None
 
 
-class ResponseBoardsByTypes(Response):
-    Adult: List[BoardInfoMini] = Field(alias='Взрослым')
-    VideoGames: List[BoardInfoMini] = Field(alias='Игры')
-    Politics: List[BoardInfoMini] = Field(alias='Политика')
-    UserBoards: List[BoardInfoMini] = Field(alias='Пользовательские')
-    Misc: List[BoardInfoMini] = Field(alias='Разное')
-    Art: List[BoardInfoMini] = Field(alias='Творчество')
-    Interests: List[BoardInfoMini] = Field(alias='Тематика')
-    Technology: List[BoardInfoMini] = Field(alias='Техника и софт')
-    JapaneseCulture: List[BoardInfoMini] = Field(alias='Японская культура')
+class ResponseThreadPostsByNum(Base):
+    result: int
+    unique_posters: int | None = None
+    posts: list[Post] = Field(default_factory=list)
+    error: UpstreamError | None = None
 
 
-class ResponseThreadPostsHelper(BaseModel):
-    __root__: List[Post]
+class ResponseSinglePost(Base):
+    result: int
+    post: Post | None = None
+    error: UpstreamError | None = None
 
 
-class ResponseThreadPostsByNum(Response):
-    posts: List[Post]
-
-    @classmethod
-    def parse_obj(cls, *args, **kwargs):
-        h = ResponseThreadPostsHelper.parse_obj(*args, **kwargs)
-        return cls(posts=h.__root__)
-
-
-class ResponseThreadPostsByPost(Response):
-    posts: List[Post]
-
-    @classmethod
-    def parse_obj(cls, *args, **kwargs):
-        h = ResponseThreadPostsHelper.parse_obj(*args, **kwargs)
-        return cls(posts=h.__root__)
-
-
-class ResponseSinglePost(Response):
-    post: Optional[Post]
-
-    @classmethod
-    def parse_obj(cls, *args, **kwargs):
-        h = ResponseThreadPostsHelper.parse_obj(*args, **kwargs)
-        return cls(posts=h.__root__)
-
-    @validator('post', pre=True)
-    def parse(cls, v):
-        if isinstance(v, list):
-            if v:
-                return v[0]
-        return None
+ResponseBoards = list[Board]
+ResponseBoardsByTypes = dict[str, list[Board]]
+ResponseThreadPostsByPost = ResponseThreadPostsByNum
